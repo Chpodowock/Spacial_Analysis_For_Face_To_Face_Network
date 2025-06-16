@@ -218,7 +218,7 @@ class NetworkVisualizer:
         )])
     
         fig.update_layout(title_text="📊 Area Transition Sankey Diagram", font_size=12)
-        fig.show()
+        return fig
 
 
 
@@ -374,7 +374,7 @@ class NetworkVisualizer:
             plot_bgcolor="white"
         )
     
-        fig.show()
+        return fig
 
         
 
@@ -454,6 +454,7 @@ class NetworkVisualizer:
             template="plotly_white",
             margin=dict(t=50)
         )
-    
-        fig.show()
+
+        return fig
+
 

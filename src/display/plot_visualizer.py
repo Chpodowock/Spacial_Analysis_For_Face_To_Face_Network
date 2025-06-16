@@ -1,4 +1,4 @@
-from display_manager import go, px, cycle, display, pd, make_subplots, chain, Markdown, Counter
+from display_manager import go, px, cycle, display, pd, make_subplots, chain, Markdown, Counter,pio
 
 class PlotVisualizer:
     def __init__(self,world, periods_df=None):
@@ -43,7 +43,7 @@ class PlotVisualizer:
             height=450
         )
     
-        fig.show()
+        return fig
 
     # ==== Normalized Activity Line Plot ====
     def plot_normalized_activity(
@@ -139,7 +139,8 @@ class PlotVisualizer:
 
         # Layout adjustments
         self._finalize_layout(fig, experiment_id, mode_label, title_suffix)
-        display(fig)
+        
+        return fig
 
     def plot_transition_debug_activity(
         self,
@@ -185,7 +186,7 @@ class PlotVisualizer:
             ),
         }
 
-        self.plot_normalized_activity(
+        fig = self.plot_normalized_activity(
             entities=entities,
             experiment_id=experiment_id,
             mode_label="Total Activity, Smoothed & Derivative",
@@ -194,6 +195,7 @@ class PlotVisualizer:
             sort_by_activity=False,
             df_period = transition_df,
         )
+        return fig
 
     # ==== Generic Bar Plot ====
     def plot_bar_distribution(
@@ -226,7 +228,10 @@ class PlotVisualizer:
             template="plotly_white",
             height=height,
         )
-        display(fig)
+        
+
+        return fig
+    
 
     def plot_signature_distributions(self):
         """
@@ -315,7 +320,7 @@ class PlotVisualizer:
         fig.update_yaxes(title_text="Count", row=2, col=1)
         fig.update_yaxes(title_text="Count", row=2, col=2)
 
-        fig.show()
+        return fig
 
     # ==== Period Shading Helper ====
     def _add_period_shading(self, fig, entities, df_periods):
@@ -479,7 +484,7 @@ class PlotVisualizer:
         fig.update_yaxes(title_text="Number of Contacts", row=1, col=1)
         fig.update_yaxes(title_text="Number of Contacts", row=1, col=2)
 
-        display(fig)
+        return fig
 
         print(f"\n✅ Report completed for {experiment_id}")
 
@@ -601,4 +606,4 @@ class PlotVisualizer:
             height=500,
         )
 
-        display(fig)
+        return fig

@@ -74,7 +74,7 @@ class MatrixVisualizer:
             height=600,
         )
 
-        fig.show()
+        return fig
 
     def plot_cosine_similarity_matrix(
         self,
@@ -229,4 +229,4 @@ class MatrixVisualizer:
             height=600,
         )
 
-        fig.show()
+        return fig

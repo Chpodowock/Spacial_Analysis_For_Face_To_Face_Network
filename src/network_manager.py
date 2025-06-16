@@ -1,6 +1,9 @@
 from collections import Counter
 import networkx as nx
 import pandas as pd
+import numpy as np
+import os
+
 
 class NetworkManager:
 
@@ -142,3 +145,54 @@ class NetworkManager:
                     area.temporal_agent_graphs.append((time_bin, G))
     
         print("✅ Built fixed-window temporal contact graphs in all Area objects.")
+        
+        
+        
+        
+
+
+
+    
+    def export_node_edge_timeseries_per_area(self, world, output_dir="densification_data", areas=None):
+        """
+        For each area, compute the (N, M) per time step and export to a CSV file
+        as an L x 2 array with no headers. Compatible with the densificationscalingMLE code.
+    
+        Each row in output CSV:  N, M
+        """
+    
+        # Prepare output directory
+        os.makedirs(output_dir, exist_ok=True)
+        import glob
+        # === Clean existing CSV files in the output directory ===
+        old_files = glob.glob(os.path.join(output_dir, "nm_*.csv"))
+        for f in old_files:
+            try:
+                os.remove(f)
+            except Exception as e:
+                print(f"[!] Failed to remove {f}: {e}")
+        print(f"[i] Cleared {len(old_files)} old .csv file(s) in '{output_dir}'.")
+    
+        # Process areas
+        areas = areas or list(world.areas.keys())
+    
+        for area_id in areas:
+            area = world.areas[area_id]
+            graphs = area.temporal_agent_graphs
+    
+            nm_values = []
+            for time, G in graphs:
+                n = G.number_of_nodes()
+                m = G.number_of_edges()
+                if n > 0 and m > 0:
+                    nm_values.append((n, m))
+    
+            if nm_values:
+                nm_array = np.array(nm_values, dtype=int)
+                safe_area_name = area.name.replace(" ", "_").lower()
+                filename = os.path.join(output_dir, f"nm_{safe_area_name}.csv")
+                np.savetxt(filename, nm_array, delimiter=",", fmt="%d")
+                print(f"[✓] Saved: {filename}")
+            else:
+                print(f"[!] Skipped {area.name} (no valid (N,M) data)")
+    

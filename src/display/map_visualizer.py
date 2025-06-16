@@ -8,7 +8,7 @@ class MapVisualizer:
         self.signatures = world.signatures
         self.world = world
 
-    def display(self, scale=1.0, show_outline=False, activity_threshold=0.005):
+    def display(self, scale=1.0, show_outline=False, activity_threshold=0):
         """
         Display plans with agent signature surfaces, area colors, and interactive legend.
         Signature polygons have opacity proportional to their activity.
@@ -95,7 +95,7 @@ class MapVisualizer:
                 
                 
     
-                opacity = 0.1 + (1 - 0.1) * min(norm_activity, 1.0)
+                opacity = 0.2 + (1 - 0.2) * min(norm_activity, 1.0)
     
                 hover_text = (
                     f"<b>Signature:</b> {sig_id}<br>"
@@ -116,7 +116,8 @@ class MapVisualizer:
                         fillcolor=area_color,
                         hovertext=hover_text,
                         hoverinfo="text",
-                        name=f"Area {area_id}" if area_id else "Unassigned",
+                        name=hover_text,
+                        #name=f"Area {area_id}" if area_id else "Unassigned",
                         showlegend=(area_id not in used_area_ids),
                         legendgroup=f"area_{area_id}" if area_id else "area_unassigned",
                         opacity=opacity
@@ -158,7 +159,7 @@ class MapVisualizer:
             )
         )
     
-        fig.show()
+        return fig
 
 
 
@@ -302,4 +303,4 @@ class MapVisualizer:
         )
     
         fig.update(frames=frames)
-        fig.show()
+        return fig

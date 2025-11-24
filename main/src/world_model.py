@@ -304,7 +304,7 @@ class WorldModel:
             )
           
             # Create and assign the agent
-            agent = Agent(agent_id)
+            agent = Agent(str(agent_id))
             agent.trajectorie = area_series
             self.agents[agent_id] = agent
           

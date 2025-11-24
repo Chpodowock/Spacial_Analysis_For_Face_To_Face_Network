@@ -13,14 +13,7 @@ class Agent(Entity):
         self.normalized_entropy: Optional[float] = None
 
     def compute_entropy(self) -> None:
-        """
-        Compute the Shannon entropy of area visits over time.
 
-        Sets:
-            self.entropy: raw entropy
-            self.max_entropy: maximum possible entropy given area count
-            self.normalized_entropy: scaled to [0, 1]
-        """
         if self.trajectorie is None or self.trajectorie.empty:
             self.entropy = self.max_entropy = self.normalized_entropy = 0.0
             return

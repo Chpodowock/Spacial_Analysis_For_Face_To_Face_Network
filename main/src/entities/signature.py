@@ -57,7 +57,7 @@ class Signature(Entity):
         if total == 0 or not self.plan_counts:
             return None, 0.0
 
-        dominant_plan = max(self.plan_counts, key=self.plan_counts.get)
+        dominant_plan = max(self.plan_counts, key=self.plan_counts.get) # type: ignore
         ratio = self.plan_counts[dominant_plan] / total
         return (dominant_plan, ratio) if ratio >= threshold else (None, ratio)
 

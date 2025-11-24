@@ -78,7 +78,7 @@ class PlotVisualizer:
                     opacity=0.9,
                 )
             )
-            fig.data = (fig.data[-1],) + fig.data[:-1]
+            fig.data = (fig.data[-1],) + fig.data[:-1] # type: ignore
 
         if df_period is not None:
             self._add_period_shading(fig, entities, df_period, with_labels=with_labels)

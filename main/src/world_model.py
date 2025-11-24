@@ -47,8 +47,6 @@ class WorldModel:
 
         self.plans_dir = self.base_dir / "data" / "plans" / self.experiment_id
         
-
-        
         
     def initialize(self):
         self.load_data()
@@ -133,17 +131,6 @@ class WorldModel:
             for reader_id, (x_rel, y_rel) in info["readers"].items():
                 self.readers[reader_id] = Reader(reader_id, x_rel, y_rel, plan_name)
                 
-                
-    def compute_agents_entropies(self):
-        count = 0
-        for agent in self.agents.values():
-            if hasattr(agent, "compute_entropy"):
-                agent.compute_entropy()
-                count += 1
-        print(f"✅ Computed entropy for {count} agents.")
-
-
-
     def compute_signatures(self):
         signature_objects = {}
         unique_signatures = (
@@ -252,7 +239,14 @@ class WorldModel:
         )
             self.areas[area_number] = area
 
-            
+
+    def compute_agents_entropies(self):
+        count = 0
+        for agent in self.agents.values():
+            if hasattr(agent, "compute_entropy"):
+                agent.compute_entropy()
+                count += 1
+        print(f"✅ Computed entropy for {count} agents.")
 
                 
     def assign_agents_to_areas_over_time(self, freq=DEFAULT_FREQ):

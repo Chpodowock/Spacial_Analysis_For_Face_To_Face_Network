@@ -17,7 +17,7 @@ class PlotVisualizer:
         sort_by_activity=False,
         top_n=5,
         df_period=None,
-        with_labels=True  # ✅ zoom-aware label control
+        with_labels=True 
     ):
         """
         Plots normalized activity time series for a selection of entities.

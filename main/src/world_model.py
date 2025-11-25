@@ -32,7 +32,7 @@ class WorldModel:
         self.time_offset = experiments_definition[experiment_id]["offset"]
         self.plans_definitions = experiments_definition[experiment_id]['plans']
 
-        self.df = None
+        self.df_tijs = None
         self.period_manager = None
         self.plans = {}
         self.readers = {}
@@ -58,7 +58,7 @@ class WorldModel:
         self._load_contact_data()
         periods_df = self._load_periods_data()
         self.period_manager = PeriodManager(
-            self.df, periods_df, self.experiment_id, self.time_offset
+            self.df_tijs, periods_df, self.experiment_id, self.time_offset
         )
         self._load_plans_and_readers()
         
@@ -68,16 +68,16 @@ class WorldModel:
         )
     
         try:
-            self.df = pd.read_csv(data_path, delimiter=",")
+            self.df_tijs = pd.read_csv(data_path, delimiter=",")
             print(f"✅ Loaded contact data file: {data_path.name}")
     
-            if "readers" in self.df.columns:
-                self.df["readers"] = self.df["readers"].apply(ast.literal_eval)
-                self.df.rename(columns={"readers": "signature"}, inplace=True)
+            if "readers" in self.df_tijs.columns:
+                self.df_tijs["readers"] = self.df_tijs["readers"].apply(ast.literal_eval)
+                self.df_tijs.rename(columns={"readers": "signature"}, inplace=True)
                 print("✅ Converted and renamed 'readers' column to 'signature'.")
     
-            self.df["datetime"] = pd.to_datetime(self.df["t"], unit="s")
-            self.activity_max = self.df.set_index("datetime").resample(self.DEFAULT_FREQ).size().max() or 1
+            self.df_tijs["datetime"] = pd.to_datetime(self.df_tijs["t"], unit="s")
+            self.activity_max = self.df_tijs.set_index("datetime").resample(self.DEFAULT_FREQ).size().max() or 1
             
     
         except Exception as e:
@@ -127,14 +127,14 @@ class WorldModel:
                 print(f"❌ Plan file not found: {plan_file_path}")
                 print(f"⚠️ Proceeding to create readers for '{plan_name}' without plan image.")
     
-            # Always create Reader objects
+            # Create Reader objects at given location
             for reader_id, (x_rel, y_rel) in info["readers"].items():
                 self.readers[reader_id] = Reader(reader_id, x_rel, y_rel, plan_name)
                 
     def compute_signatures(self):
         signature_objects = {}
         unique_signatures = (
-            self.df["signature"]
+            self.df_tijs["signature"]
             .value_counts()
             .sort_values(ascending=False)
             .index.to_list()
@@ -149,10 +149,10 @@ class WorldModel:
         self._compute_signature_activities()
 
     def compute_reader_activities(self, freq=DEFAULT_FREQ):
-        expanded = self.df.loc[
-            self.df.index.repeat(self.df["signature"].str.len())
+        expanded = self.df_tijs.loc[
+            self.df_tijs.index.repeat(self.df_tijs["signature"].str.len())
         ].copy()
-        expanded["reader"] = list(chain.from_iterable(self.df["signature"]))
+        expanded["reader"] = list(chain.from_iterable(self.df_tijs["signature"]))
         expanded["datetime"] = pd.to_datetime(expanded["t"], unit="s")
 
 
@@ -169,8 +169,8 @@ class WorldModel:
 
 
         for sig_obj in self.signatures.values():
-            matching_rows = self.df[
-                self.df["signature"].apply(lambda s: set(s) == set(sig_obj.id))
+            matching_rows = self.df_tijs[
+                self.df_tijs["signature"].apply(lambda s: set(s) == set(sig_obj.id))
             ]
 
             if matching_rows.empty:
@@ -265,7 +265,7 @@ class WorldModel:
         }
           
         # 2. Prepare base DataFrame
-        df = self.df.copy()
+        df = self.df_tijs.copy()
         df["datetime"] = pd.to_datetime(df["t"], unit="s")
           
         # 3. Melt 'i' and 'j' columns into a long format

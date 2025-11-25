@@ -153,7 +153,7 @@ class NetworkManager:
 
 
     
-    def export_node_edge_timeseries_per_area(self, world, output_dir="densification_data", areas=None):
+    def export_node_edge_timeseries_per_area(self, world, output_dir_name="densification_data", areas=None):
         """
         For each area, compute the (N, M) per time step and export to a CSV file
         as an L x 2 array with no headers. Compatible with the densificationscalingMLE code.
@@ -162,7 +162,13 @@ class NetworkManager:
         """
     
         # Prepare output directory
+
+        output_dir = world.base_dir / "data" / output_dir_name
+
+        
         os.makedirs(output_dir, exist_ok=True)
+
+        
         import glob
         # === Clean existing CSV files in the output directory ===
         old_files = glob.glob(os.path.join(output_dir, "nm_*.csv"))

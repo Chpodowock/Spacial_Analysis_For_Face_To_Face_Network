@@ -64,7 +64,7 @@ class WorldModel:
         
     def _load_contact_data(self):
         data_path = (
-            self.base_dir / "data" / "TIJ_with_reader_list" / f"tij_with_readers_{self.experiment_id}.dat"
+            self.base_dir / "data" / "tijs" / f"tij_with_readers_{self.experiment_id}.dat"
         )
     
         try:

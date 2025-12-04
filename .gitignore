@@ -17,8 +17,7 @@ venv/
 data/
 
 # Except Sample Data
-!data/sample/
-!data/sample/**
+!data_sample/
 
 # VS Code
 .vscode/

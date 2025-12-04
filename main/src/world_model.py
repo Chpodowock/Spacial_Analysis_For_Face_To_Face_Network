@@ -25,9 +25,9 @@ class WorldModel:
         self,
         experiment_id,
         experiments_definition,
-        base_dir,
+        data_dir,
     ):
-        self.base_dir = Path(base_dir)
+        self.data_dir = Path(data_dir)
         self.experiment_id = experiment_id
         self.time_offset = experiments_definition[experiment_id]["offset"]
         self.plans_definitions = experiments_definition[experiment_id]['plans']
@@ -45,7 +45,7 @@ class WorldModel:
         self.area_transition_graph = None
         self.temporal_area_graphs = None
 
-        self.plans_dir = self.base_dir / "data" / "plans" / self.experiment_id
+        self.plans_dir = self.data_dir / "plans" / self.experiment_id
         
         
     def initialize(self):
@@ -64,7 +64,7 @@ class WorldModel:
         
     def _load_contact_data(self):
         data_path = (
-            self.base_dir / "data" / "tijs" / f"tij_with_readers_{self.experiment_id}.dat"
+            self.data_dir / "tijs" / f"tij_with_readers_{self.experiment_id}.dat"
         )
     
         try:
@@ -86,7 +86,7 @@ class WorldModel:
     
     def _load_periods_data(self):
         period_path = (
-            self.base_dir / "data" / "periodes" / f"periodes_{self.experiment_id}.dat"
+            self.data_dir / "periodes" / f"periodes_{self.experiment_id}.dat"
         )
     
         try:

@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import os
 
-
 class NetworkManager:
 
     def build_area_transition_graph(self, world):
@@ -94,7 +93,7 @@ class NetworkManager:
         Stores results in:
             area.temporal_agent_graphs : List[Tuple[pd.Timestamp, nx.Graph]]
         """
-        contact_df = world.df.copy()
+        contact_df = world.df_tijs.copy()
         contact_df["datetime"] = pd.to_datetime(contact_df["datetime"])
         contact_df["time_bin"] = contact_df["datetime"].dt.floor(window)
     
@@ -147,11 +146,6 @@ class NetworkManager:
         print("✅ Built fixed-window temporal contact graphs in all Area objects.")
         
         
-        
-        
-
-
-
     
     def export_node_edge_timeseries_per_area(self, world, output_dir_name="densification_data", areas=None):
         """

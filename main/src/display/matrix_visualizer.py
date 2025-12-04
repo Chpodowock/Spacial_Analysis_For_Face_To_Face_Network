@@ -126,7 +126,7 @@ class MatrixVisualizer:
         annot=False,
         fmt=".2f",
         grid_lines=True,
-        label_max_len=10,  # NEW: max number of characters for x/y labels
+        label_max_len=10, 
     ):
         """
         Plot a cosine similarity matrix as an interactive Plotly heatmap.

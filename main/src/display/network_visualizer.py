@@ -1,7 +1,6 @@
 from display_manager import dash, nx, go, np, dcc, html, Input, Output, px, pd, make_subplots
  
 
-
 class NetworkVisualizer:
 
     def __init__(self):
@@ -373,10 +372,7 @@ class NetworkVisualizer:
     
         return fig
 
-        
 
-
-    
 
 
     def plot_node_edge_distribution_per_area(self, world, areas=None):

@@ -16,6 +16,10 @@ venv/
 # Data
 data/
 
+# Except Sample Data
+!data/sample/
+!data/sample/**
+
 # VS Code
 .vscode/
 

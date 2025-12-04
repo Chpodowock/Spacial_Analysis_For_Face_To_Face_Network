@@ -229,7 +229,6 @@ class WorldModel:
             area_name = f"{dominant_plan}_{area_number}"
             area_color = hex_to_rgba(next(color_cycle))
     
-            # Create and store Area
             area = Area(
             area_number,
             area_name,
@@ -258,17 +257,14 @@ class WorldModel:
             self.agents[agent_id].trajectorie : pd.Series indexed by time
             self.signature_to_area : mapping from signature → area ID
         """
-          
-        # 1. Build signature → area map (tuples as keys)
         signature_to_area = {
             tuple(sig): area.id for area in self.areas.values() for sig in area.signatures
         }
           
-        # 2. Prepare base DataFrame
+
         df = self.df_tijs.copy()
         df["datetime"] = pd.to_datetime(df["t"], unit="s")
           
-        # 3. Melt 'i' and 'j' columns into a long format
         agent_df = pd.melt(
             df,
             id_vars=["datetime", "signature"],
@@ -276,25 +272,18 @@ class WorldModel:
             var_name="role",
             value_name="agent_id"
         )
-          
-        # 4. Normalize signature format to tuples
+
         agent_df["signature"] = agent_df["signature"].apply(
             lambda s: tuple(s) if not isinstance(s, tuple) else s
         )
-          
-        # 5. Map signature to area ID
+
         agent_df["area_id"] = agent_df["signature"].apply(signature_to_area.get)
           
-        # 6. Drop rows with unknown signatures
+
         agent_df.dropna(subset=["area_id"], inplace=True)
-          
-        # 7. Set datetime index
         agent_df.set_index("datetime", inplace=True)
-          
-        # 8. Group by agent and resample over time
         self.agents = {}
         for agent_id, group in agent_df.groupby("agent_id"):
-            # Resample area by majority vote (most frequent area in the window)
             area_series = (
                 group["area_id"]
                 .resample(freq)
@@ -302,13 +291,9 @@ class WorldModel:
                 .ffill()
                 .bfill()
             )
-          
-            # Create and assign the agent
             agent = Agent(str(agent_id))
             agent.trajectorie = area_series
             self.agents[agent_id] = agent
-          
-        # Save mapping for reference
         self.signature_to_area = signature_to_area
           
         print(f"✅ Assigned {len(self.agents)} agents with position over time.")
@@ -323,7 +308,6 @@ class WorldModel:
         agent_ids = list(self.agents.keys())
     
         for area in self.areas.values():
-            # === 1. Collect presence over time
             presence_dict = {}
     
             for agent_id, agent in self.agents.items():
@@ -337,13 +321,10 @@ class WorldModel:
     
             if presence_dict:
                 sorted_times = sorted(presence_dict)
-                # === 2. Active agents list
                 active_agents_df = pd.DataFrame(
                     [(t, presence_dict[t]) for t in sorted_times],
                     columns=["time", "agents"]
                 ).set_index("time")
-    
-                # === 3. Binary matrix: time × agent
                 binary_data = {
                     t: {aid: (aid in presence_dict[t]) for aid in agent_ids}
                     for t in sorted_times
@@ -354,8 +335,8 @@ class WorldModel:
             else:
                 active_agents_df = pd.DataFrame(columns=["agents"]).set_index(pd.DatetimeIndex([]))
                 active_matrix_df = pd.DataFrame(index=pd.DatetimeIndex([]), columns=agent_ids)
-    
-            # === 4. Store results
+
+
             area.active_agents_df = active_agents_df
             area.active_matrix_df = active_matrix_df
     

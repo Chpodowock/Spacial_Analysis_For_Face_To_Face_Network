@@ -41,6 +41,3 @@ world.initialize()
 - For any new experiment, extend `main/data/experiments_config.json` with:
   - the time offset, and  
   - the plan/reader definitions used to map RFID readers to the floor plan.
-
-
-

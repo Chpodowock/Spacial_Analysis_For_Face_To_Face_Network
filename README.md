@@ -4,7 +4,7 @@ Toolkit for exploring face-to-face contact data: loading raw TIJ events, synchro
 
 ## Project layout
 - `main/src/`: core logic (world model, period manager, network/matrix utilities, visualisation helpers).
-- `main/notebooks/`: Jupyter workflows; `pipeline.ipynb` shows the end-to-end flow and `experiments_config.json` stores plan/reader metadata.
+- `main/notebooks/`: Jupyter workflows; `pipeline.ipynb` shows the end-to-end flow.
 - `main/data/`: expected data folders (`TIJ_with_reader_list/`, `periodes/`, `plans/`, etc.). Only sample Data files are included here.
 
 ## Setup
@@ -38,6 +38,6 @@ world.initialize()
   - `<raw_contacts_folder>/`: store the raw contact data in the dedicated folder used in the sample data.
   - `tijs/`: contains the preprocessed *tij* files with enriched signature information.
 
-- For any new experiment, extend `main/data/experiments_config.json` with:
+- For any new experiment, extend and the plan/reader metadata at : `main/data/experiments_config.json` with:
   - the time offset
   - the plan/reader definitions used to map RFID readers to the floor plan.

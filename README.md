@@ -1,11 +1,11 @@
 # Spatial Analysis for Face-to-Face Networks
 
-Toolkit for exploring face-to-face contact data: loading raw TIJ events, synchronising with study periods, mapping reader signatures to spatial plans, clustering agents/areas by activity, and visualising results with Plotly/Dash.
+Toolkit for exploring face-to-face contact data: loading raw TIJ events, synchronising with study periods, mapping readers, signatures generation, clustering agents/areas by activity, and visualising results with Plotly/Dash.
 
 ## Project layout
 - `main/src/`: core logic (world model, period manager, network/matrix utilities, visualisation helpers).
 - `main/notebooks/`: Jupyter workflows; `pipeline.ipynb` shows the end-to-end flow.
-- `main/data/`: expected data folders (`TIJ_with_reader_list/`, `periodes/`, `plans/`, etc.). Only sample Data files are included here.
+- `main/data/`: expected data folders (`TIJ_with_reader_list/`, `periodes/`, `plans/`, etc.). Only minimal sample Data files are included here.
 
 ## Setup
 1) Use Python 3.10+ and create/activate a virtual environment.
